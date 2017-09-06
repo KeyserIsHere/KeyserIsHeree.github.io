@@ -1,18 +1,16 @@
 var count = 0;
-var message = 'You clicked the cat {0} times.';
 
 function update() {
 	var counter = $('#counter')
-	var newText = message.replace('{0}', count.toString());
 
-	counter.text(newText);
+	counter.text(`You clicked the cat ${count} times.`);
 	counter.css("font-size", "+=0.5");
 }
 
 $(document).ready(function() {
 	update();
 
-	$('img').click(function(e) {
+	$('img').click(function() {
 		count++;
 		update();
 	});
