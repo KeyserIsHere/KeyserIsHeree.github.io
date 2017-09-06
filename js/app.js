@@ -1,6 +1,5 @@
 var count = 0;
 var message = 'You clicked the cat {0} times.';
-var style = 'font-size: {0}px;';
 
 function update() {
 	var counter = $('#counter')
