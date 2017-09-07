@@ -6,16 +6,29 @@ class Cat {
         self.picture = picture;
         self.count = 0;
 
-        let mainDiv = $('#cats');
-        let catDiv = $('<div></div>');
+        self.menuItem = $(`<li><a href="#">${self.name}</a></li>`);
+        $("ul").append(self.menuItem);
 
-        mainDiv.append(catDiv);
+        let mainDiv = $('#cats');
+        let catDiv = $('<div class="cat"></div>');
+        catDiv.css("display", "none");
 
         self.img = $(`<img src="${self.picture}">`);
-        catDiv.append(self.img);
-
         self.counter = $('<p></p>');
+
+        catDiv.append(self.img);
         catDiv.append(self.counter);
+
+        self.menuItem.click(function(e) {
+            e.preventDefault();
+
+            // hide all others
+            $(".cat").css("display", "none");
+
+            // display the selected
+            catDiv.css("display", "");
+            mainDiv.append(catDiv);
+        });
 
         self.img.click(function () {
             self.count++;
@@ -28,4 +41,6 @@ class Cat {
 $(document).ready(function () {
     new Cat('Kimmy', 'img/cat.jpg');
     new Cat('Logan', 'img/cat2.jpg');
+    new Cat('Bella & Tigger', 'img/cat3.jpg');
+    new Cat('Luna', 'img/cat4.jpg');
 });
