@@ -97,8 +97,7 @@ var catView = {
             
             controller.updateCurrentCat(result);
 
-            // hides form
-            $('#super-cancel').trigger('click');
+            $('#super-cancel').trigger('click');    // hides form
         });
     },
     update: function() {
