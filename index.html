@@ -16,6 +16,17 @@
         <h2 id="cat-title"></h2>
         <img id="cat-picture"></img>
         <p>You clicked <span id="cat-count"></span> times!</p>
+
+        <section>
+            <button id="super-enable">Admin</button>
+            <form id="cat-super">
+                <input id="super-name" name="name" placeholder="Cat name" type="text"></input>
+                <input id="super-picture" name="pictureUri" placeholder="Image source" type="text"></input>
+                <input id="super-count" name="clickCount" placeholder="Click count" type="number"></input>
+                <button type="submit">Save</button>
+                <button id="super-cancel" type="button">Cancel</button>                
+            </form>
+        </section>
     </main>
 
     <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>

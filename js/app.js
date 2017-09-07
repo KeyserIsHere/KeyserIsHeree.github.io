@@ -24,6 +24,7 @@ var controller = {
         model.currentCat = model.cats[0];
         catMenu.init();        
         catView.init();
+        catView.update();
     },
     getCats: function() {
         return model.cats;
@@ -31,13 +32,24 @@ var controller = {
     getCurrentCat: function() {
         return model.currentCat;
     },
+    setCurrentCat: function(cat) {
+        model.currentCat = cat;
+        catView.update();
+    },
     handleCatClick: function() {
         model.currentCat.clickCount++;
         catView.update();
     },
-    setCurrentCat: function(cat) {
-        model.currentCat = cat;
+    updateCurrentCat: function(newCat) {
+        var index = model.cats.indexOf(model.currentCat);
+        console.log(model.currentCat);
+        console.log(newCat);
+        model.cats[index] = newCat;
+        model.currentCat = newCat;
+
         catView.update();
+        catMenu.clear();
+        catMenu.init();
     }
 };
 
@@ -46,9 +58,47 @@ var catView = {
         this.title = $('#cat-title');
         this.picture = $('#cat-picture');
         this.count = $('#cat-count');
+        this.form = $('#cat-super');
+        
+        this.form.hide();    // the admin form is hidden by default
 
         this.picture.click(() => {
             controller.handleCatClick();
+        });
+
+        const enableSuperButton = $('#super-enable');
+
+        enableSuperButton.click(() => {
+            var superName = $('#super-name');
+            var superPicture = $('#super-picture');
+            var superCount = $('#super-count');
+            var selectedCat = controller.getCurrentCat();
+
+            superName.val(selectedCat.name);
+            superPicture.val(selectedCat.pictureUri);
+            superCount.val(selectedCat.clickCount);
+
+            enableSuperButton.hide();            
+            this.form.show();            
+        });
+
+        $('#super-cancel').click(() => {
+            this.form.hide();
+            enableSuperButton.show();
+        });
+
+        this.form.submit((e) => {
+            e.preventDefault();
+
+            var result = { };
+            $.each($('form').serializeArray(), function() {
+                result[this.name] = this.value;
+            });
+            
+            controller.updateCurrentCat(result);
+
+            // hides form
+            $('#super-cancel').trigger('click');
         });
     },
     update: function() {
@@ -70,6 +120,9 @@ var catMenu = {
                 e.preventDefault();
             });
         }
+    },
+    clear: function() {
+        $('ul').empty();
     }
 };
 
