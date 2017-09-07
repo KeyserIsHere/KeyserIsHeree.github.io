@@ -1,44 +1,78 @@
-function hideElement(selector) {
-    selector.css('display', 'none');
-}
+var model = {
+    currentCat: null,
+    cats: [
+        {
+            name: 'Tiger',
+            pictureUri: 'img/cat.jpg',
+            clickCount: 0
+        },
+        {
+            name: 'Kimmy',
+            pictureUri: 'img/cat2.jpg',
+            clickCount: 0
+        },
+        {
+            name: 'Logan',
+            pictureUri: 'img/cat3.jpg',
+            clickCount: 0
+        }
+    ]
+};
 
-function showElement(selector) {
-    selector.css('display', '');
-}
+var controller = {
+    init: function() {
+        model.currentCat = model.cats[0];
+        catMenu.init();        
+        catView.init();
+    },
+    getCats: function() {
+        return model.cats;
+    },
+    getCurrentCat: function() {
+        return model.currentCat;
+    },
+    handleCatClick: function() {
+        model.currentCat.clickCount++;
+        catView.update();
+    },
+    setCurrentCat: function(cat) {
+        model.currentCat = cat;
+        catView.update();
+    }
+};
 
-function createCat(name, picture) {
-    let clickCount = 0;
+var catView = {
+    init: function() {
+        this.title = $('#cat-title');
+        this.picture = $('#cat-picture');
+        this.count = $('#cat-count');
 
-    const $cat = $('<div />', {class: 'cat'});
-    const $img = $('<img />', {src: picture}).appendTo($cat);
-    const $counter = $('<p />').appendTo($cat);
-    const $menuItem = $(`<li><a href="#">${name}</a></li>`).appendTo($('#menu'));
+        this.picture.click(() => {
+            controller.handleCatClick();
+        });
+    },
+    update: function() {
+        const currentCat = controller.getCurrentCat();
+        this.title.text(currentCat.name);
+        this.picture.attr('src', currentCat.pictureUri);
+        this.count.text(currentCat.clickCount);
+    }
+};
 
-    $img.click(() => {
-        clickCount++;
-		
-        $counter
-            .text(`You clicked ${name} ${clickCount} times!`)
-            .css('font-size', '+=0.25');
-    });
-
-    $menuItem.click((e) => {
-        hideElement($('.cat'));
-
-        e.preventDefault();
-        showElement($cat);
-    });
-
-    return $cat;
-}
+var catMenu = {
+    init: function() {
+        const catList = controller.getCats();
+        let cat = null;
+        for (let i = 0, len = catList.length; i < len; i++) {
+            cat = $(`<li><a href="#">${catList[i].name}</a></li>`).appendTo($('#menu'));
+            cat.click((e) => {
+                controller.setCurrentCat(catList[i]);
+                e.preventDefault();
+            });
+        }
+    }
+};
 
 $(function() {
-    const $main = $('#cats');
-
-    $main.append(createCat('Kimmy', 'img/cat.jpg'));
-    $main.append(createCat('Logan', 'img/cat2.jpg'));
-    $main.append(createCat('Bella & Tigger', 'img/cat3.jpg'));
-    $main.append(createCat('Luna', 'img/cat4.jpg'));
-
-    hideElement($('.cat'));
+    controller.init();    
 });
